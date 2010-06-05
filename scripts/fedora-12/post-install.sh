@@ -93,6 +93,7 @@ cp /var/cache/rinse/fedora-12.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
 chroot ${prefix} /sbin/ldconfig
+chroot ${prefix} /sbin/MAKEDEV urandom
 chroot ${prefix} /usr/bin/yum -y install yum         2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install vim-minimal 2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install dhclient    2>/dev/null
