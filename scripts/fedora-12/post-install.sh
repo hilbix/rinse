@@ -55,24 +55,15 @@ fi
 # A correct mirror URL does not contain /Packages on the end
 mirror=`dirname $mirror`
 
-echo "  Creating yum.conf"
+echo "  Creating initial yum.conf"
 cat > ${prefix}/etc/yum.conf <<EOF
 [main]
-cachedir=/var/cache/yum
-debuglevel=1
 reposdir=/dev/null
 logfile=/var/log/yum.log
-retries=20
-obsoletes=1
-gpgcheck=0
-assumeyes=1
-
-# repos
 
 [core]
 name=core
 baseurl=$mirror
-
 EOF
 
 
@@ -97,6 +88,17 @@ chroot ${prefix} /sbin/MAKEDEV urandom
 chroot ${prefix} /usr/bin/yum -y install yum         2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install vim-minimal 2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install dhclient    2>/dev/null
+
+# Can use regular repositories now
+echo "  Creating final yum.conf"
+cat > ${prefix}/etc/yum.conf <<EOF
+[main]
+logfile=/var/log/yum.log
+gpgcheck=1
+
+# PUT YOUR REPOS HERE OR IN separate files named file.repo
+# in /etc/yum.repos.d
+EOF
 
 
 #
