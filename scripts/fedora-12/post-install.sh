@@ -52,6 +52,9 @@ if [ $ARCH = "amd64" ] ; then
     arch=x86_64
 fi
 
+# A correct mirror URL does not contain /Packages on the end
+mirror=`dirname $mirror`
+
 echo "  Creating yum.conf"
 cat > ${prefix}/etc/yum.conf <<EOF
 [main]
