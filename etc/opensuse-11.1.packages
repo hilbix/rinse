@@ -78,6 +78,7 @@ libxml2-python
 libzio
 libzypp
 login
+makedev
 mingetty
 module-init-tools
 ncurses-utils
