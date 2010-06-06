@@ -54,7 +54,7 @@ echo "  Bootstrapping zypper"
 chroot ${prefix} /sbin/ldconfig
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper      2>/dev/null
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install vim-minimal 2>/dev/null
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install dhclient    2>/dev/null
+chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install e2fsprogs   2>/dev/null
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks update              2>/dev/null
 
 
