@@ -23,6 +23,19 @@ for i in ${prefix}/usr/lib/python2.4/site-packages/urlgrabber/keepalive.*; do
 done
 
 #
+#  Record arch, if present.
+#
+if [ -d $prefix/etc/rpm ]; then
+
+    #
+    #  If i386 then record this
+    #
+    if [ "$arch" = "i386" ]; then
+        echo "i686-centos-linux-gnu" >> $prefix/etc/rpm/platform
+    fi
+fi
+
+#
 #  Run "yum install yum".
 #
 echo "  Bootstrapping yum"
