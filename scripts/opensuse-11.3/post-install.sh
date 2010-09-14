@@ -76,8 +76,13 @@ mount -o bind /proc ${prefix}/proc
 
 echo "  Bootstrapping zypper"
 chroot ${prefix} /sbin/ldconfig
+
+# Need key trusted to prevent warnings during package install
+chroot ${prefix} /usr/bin/zypper -n --gpg-auto-import-keys refresh --force-download
+
 # Need these two to be properly installed to prevent numerous errors during installation of other packages
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install PolicyKit permissions 2>/dev/null
+
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper      2>/dev/null
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install vim-minimal 2>/dev/null
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install e2fsprogs   2>/dev/null
