@@ -68,6 +68,7 @@ python-libs
 python-sqlite
 python-urlgrabber
 python-iniparse
+python-libs
 readline
 rpm
 rpm-libs
