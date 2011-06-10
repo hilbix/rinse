@@ -80,7 +80,7 @@ echo "  Priming the yum cache"
 if [ ! -d "${prefix}/var/cache/yum/core/packages/" ]; then
     mkdir -p ${prefix}/var/cache/yum/core/packages
 fi
-cp /var/cache/rinse/fedora-14.$ARCH/* ${prefix}/var/cache/yum/core/packages/
+cp /var/cache/rinse/fedora-15.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
 chroot ${prefix} /sbin/ldconfig
@@ -88,6 +88,8 @@ chroot ${prefix} /sbin/MAKEDEV urandom
 chroot ${prefix} /usr/bin/yum -y install yum         2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install vim-minimal 2>/dev/null
 chroot ${prefix} /usr/bin/yum -y install dhclient    2>/dev/null
+
+chroot ${prefix} ln -nfs /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
 
 # Can use regular repositories now
 echo "  Creating final yum.conf"
