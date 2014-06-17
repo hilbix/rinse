@@ -57,10 +57,11 @@ install: fixupperms install-manpage
 	chmod 755 ${PREFIX}/usr/lib/rinse/common/*.sh
 	mkdir -p ${PREFIX}/var/cache/rinse
 	cp bin/rinse ${PREFIX}/usr/sbin/
-	chmod 755 ${PREFIX}/usr/sbin/rinse
+	perl -pi -e "s/XXUNRELEASEDXX/$(VERSION)/" $(PREFIX)/usr/sbin/rinse*
+	chmod 755 ${PREFIX}/usr/sbin/rinse*
 	cp etc/*.packages ${PREFIX}/etc/rinse
 	cp etc/*.conf     ${PREFIX}/etc/rinse
-	for i in scripts/*/; do name=`basename $$i`; if [ "$$name" != "CVS" ]; then mkdir -p ${PREFIX}/usr/lib/rinse/$$name  ; cp $$i/*.sh ${PREFIX}/usr/lib/rinse/$$name ; fi ; done
+	for i in scripts/*/; do name=`basename $$i`; mkdir -p ${PREFIX}/usr/lib/rinse/$$name  ; cp $$i/*.sh ${PREFIX}/usr/lib/rinse/$$name ; done
 	cp misc/rinse ${PREFIX}/etc/bash_completion.d
 
 
