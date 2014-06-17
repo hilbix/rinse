@@ -1,9 +1,5 @@
 #
 #  Makefile for rinse, the RPM installation entity
-#
-# Steve
-# --
-#
 
 
 #
@@ -27,15 +23,6 @@ default:
 	@echo "  test-verbose - Run the tests, verbosely"
 	@echo "  uninstall    - Uninstall from ${PREFIX}"
 	@echo " "
-
-
-#
-#  Show what has been changed in the local copy vs. the remote repository.
-#
-diff:
-	hg diff 2>/dev/null
-
-
 
 #
 #  Clean edited files.
@@ -92,7 +79,6 @@ release: clean
 	cp -R . $(DIST_PREFIX)/$(BASE)-$(VERSION)
 	perl -pi -e "s/XXUNRELEASEDXX/$(VERSION)/g" $(DIST_PREFIX)/$(BASE)-$(VERSION)/bin/rinse*
 	rm -rf $(DIST_PREFIX)/$(BASE)-$(VERSION)/debian
-	rm -rf $(DIST_PREFIX)/$(BASE)-$(VERSION)/.hg*
 	rm -rf $(DIST_PREFIX)/$(BASE)-$(VERSION)/.release
 	cd $(DIST_PREFIX) && tar -cvf $(DIST_PREFIX)/$(BASE)-$(VERSION).tar $(BASE)-$(VERSION)/
 	gzip $(DIST_PREFIX)/$(BASE)-$(VERSION).tar
@@ -115,14 +101,6 @@ test:
 #
 test-verbose:
 	prove --shuffle --verbose tests/
-
-
-#
-#  Update the local copy from the remote repository.
-#
-#
-update:
-	hg pull --update
 
 
 #
