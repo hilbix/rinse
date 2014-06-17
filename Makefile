@@ -7,7 +7,9 @@
 #
 DIST_PREFIX = ${TMP}
 BASE        = rinse
-PREFIX      =
+PREFIX      = ${DESTDIR}
+DIST_PREFIX = ${DESTDIR}
+
 
 include VERSION
 
@@ -47,25 +49,22 @@ fixupperms:
 #
 #  Install software
 #
-install: fixupperms install-manpage
+install: fixupperms
 	mkdir -p ${PREFIX}/etc/bash_completion.d
 	mkdir -p ${PREFIX}/etc/rinse
 	mkdir -p ${PREFIX}/usr/sbin
 	mkdir -p ${PREFIX}/usr/lib/rinse
 	mkdir -p ${PREFIX}/usr/lib/rinse/common
-	cp ./scripts.common/* ${PREFIX}/usr/lib/rinse/common
+	cp -p ./scripts.common/* ${PREFIX}/usr/lib/rinse/common
 	chmod 755 ${PREFIX}/usr/lib/rinse/common/*.sh
 	mkdir -p ${PREFIX}/var/cache/rinse
-	cp bin/rinse ${PREFIX}/usr/sbin/
+	cp -p bin/rinse ${PREFIX}/usr/sbin/
 	perl -pi -e "s/XXUNRELEASEDXX/$(VERSION)/" $(PREFIX)/usr/sbin/rinse*
 	chmod 755 ${PREFIX}/usr/sbin/rinse*
-	cp etc/*.packages ${PREFIX}/etc/rinse
-	cp etc/*.conf     ${PREFIX}/etc/rinse
+	cp -p etc/*.packages ${PREFIX}/etc/rinse
+	cp -p etc/*.conf     ${PREFIX}/etc/rinse
 	for i in scripts/*/; do name=`basename $$i`; mkdir -p ${PREFIX}/usr/lib/rinse/$$name  ; cp $$i/*.sh ${PREFIX}/usr/lib/rinse/$$name ; done
-	cp misc/rinse ${PREFIX}/etc/bash_completion.d
-
-
-install-manpage:
+	cp -p misc/rinse ${PREFIX}/etc/bash_completion.d
 	pod2man --release=${VERSION} --official --section=8 ./bin/rinse ./bin/rinse.8
 	gzip --force -9 bin/rinse.8
 	-mkdir -p ${PREFIX}/usr/share/man/man8/
