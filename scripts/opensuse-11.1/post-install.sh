@@ -66,6 +66,8 @@ chroot ${prefix} /usr/bin/zypper clean
 umount ${prefix}/proc
 umount ${prefix}/sys
 
+echo "  Ending uuidd"
+pkill uuidd
 
 #
 #  6.  Remove the .rpm files from the prefix root.
