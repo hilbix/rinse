@@ -995,6 +995,9 @@ sub findMirrorContents
     #
     my $have_rpm = 0;
 
+    my $old_fh;
+    my $subindex;
+
     #
     # Parse the HTML.
     #
@@ -1035,10 +1038,21 @@ sub findMirrorContents
 	my %links;
 
 	# Collect all RPM links in sub index pages.
+	if ($CONFIG{ 'verbose' }) {
+	  print "Loading sub index pages from $mirror\n";
+	  $old_fh = select(STDOUT);
+	  $| = 1;
+	}
+
 	foreach my $sub_index ( @sub_indexes )
 	{
+	  $subindex = $sub_index;
+	  $subindex =~ s#/$##;
+	  print "$subindex " if $CONFIG{ 'verbose' };
 	    %links = ( %links, findMirrorContentsInPage("$mirror/$sub_index") );
 	}
+	print "\n" if $CONFIG{ 'verbose' };
+	select($old_fh) if $CONFIG{ 'verbose' };
 
 	return (%links);
     }
