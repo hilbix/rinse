@@ -70,11 +70,6 @@ EOF
 #
 #  4.  Run "yum install yum".
 #
-echo "  Mounting /proc"
-if [ ! -d "${prefix}/proc" ]; then
-    mkdir -p "${prefix}/proc"
-fi
-mount -o bind /proc ${prefix}/proc
 
 echo "  Moving /bin/, /sbin/, /lib/ to /usr/"
 for dir in bin sbin lib lib64; do
@@ -117,6 +112,7 @@ echo "  Cleaning up"
 chroot ${prefix} /usr/bin/yum clean all
 
 umount ${prefix}/proc
+umount ${prefix}/sys
 
 
 #
