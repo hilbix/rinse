@@ -3,10 +3,10 @@ Maintainer: Thomas Lange <lange@debian.org>
 Section: admin
 Priority: extra
 Standards-Version: 3.9.3
-Build-Depends: debhelper (>= 4.0.0)
-Homepage: http://www.steve.org.uk/Software/rinse/
-Vcs-Hg: http://rinse.repository.steve.org.uk/
-Vcs-Browser: http://rinse.repository.steve.org.uk/
+Build-Depends: debhelper (>= 7)
+Homepage: XXXXXXXXXX
+Vcs-Git: git://git.debian.org/git/collab-maint/rinse.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/rinse.git
 
 Package: rinse
 Architecture: all
@@ -21,5 +21,5 @@ Description: RPM installation environment
  Rinse can setup 32 and 64-bit installations of:
   * CentOS
   * Scientific Linux CERN
-  * Fedora Core
+  * Fedora
   * OpenSUSE
