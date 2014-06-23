@@ -88,10 +88,7 @@ cp $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
 chroot ${prefix} /usr/sbin/ldconfig
-chroot ${prefix} /usr/bin/yum -y install yum         2>/dev/null
-chroot ${prefix} /usr/bin/yum -y install vim-minimal 2>/dev/null
-chroot ${prefix} /usr/bin/yum -y install dhclient    2>/dev/null
-chroot ${prefix} /usr/bin/yum -y install rsyslog     2>/dev/null
+chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient
 
 # Can use regular repositories now
 echo "  Creating final yum.conf"

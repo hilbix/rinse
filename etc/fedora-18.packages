@@ -78,6 +78,7 @@ rpm
 rpm-build-libs
 rpm-libs
 rpm-python
+rsyslog
 sed
 setup
 shared-mime-info
