@@ -167,7 +167,7 @@ Show the version number and exit.
 
 Copyright (c) 2007-2010 by Steve Kemp.  All rights reserved.
 
-Copyright (c) 2011-2013 by Thomas Lange.
+Copyright (c) 2011-2014 by Thomas Lange.
 
 This module is free software;
 you can redistribute it and/or modify it under
@@ -350,7 +350,7 @@ sub testSetup
              ( !-x "/usr/bin/$file" ) )
         {
             print "The following (required) binary appears to be missing:\n";
-            print "\t" . $file . "\n";
+            print "\t$file\n";
             print "Aborting...\n";
             exit;
         }
@@ -554,7 +554,7 @@ sub listDistributions
         #
         if ( $file =~ /^(.*)\/(.*)\.packages$/ )
         {
-            push @avail, $2 if ( -d "/usr/lib/rinse/" . $2 );
+            push @avail, $2 if ( -d "/usr/lib/rinse/$2" );
         }
     }
 
@@ -766,7 +766,7 @@ EOF
     #
     #  Did we find it?
     #
-    my $key = "mirror." . $arch;
+    my $key = "mirror.$arch";
     return ( $options{ $key } ) if ( $options{ $key } );
     return ( $options{ 'mirror' } ) if ( $options{ 'mirror' } );
 
@@ -912,7 +912,7 @@ sub downloadPackagesToDirectory
 
             if ( $CONFIG{ 'print-uris' } )
             {
-                print $mirror . "/" . $key . "\n";
+                print "$mirror/$key\n";
             }
             else
             {
@@ -1200,7 +1200,7 @@ sub unpackPackages
     #
     #  Get a sorted list of the RPMs
     #
-    my @rpms = glob( $dir . "/*.rpm" );
+    my @rpms = glob( "$dir/*.rpm" );
     @rpms = sort {lc($a) cmp lc($b)} @rpms;
 
     # Command to execute after extraction
@@ -1336,7 +1336,7 @@ sub postInstallationCustomization
     {
         $CONFIG{'verbose'} && print "Dir: $script\n";
 
-        foreach my $file ( sort( glob( $script . "/*" ) ) )
+        foreach my $file ( sort( glob( "$script/*" ) ) )
         {
             $CONFIG{ 'verbose' } && print "-script $file\n";
 
@@ -1386,7 +1386,7 @@ sub copyPackageFiles
 
     $CONFIG{ 'verbose' } && print "- archiving from $src - $dest\n";
 
-    foreach my $file ( sort( glob( $src . "/*.rpm" ) ) )
+    foreach my $file ( sort( glob( "$src/*.rpm" ) ) )
     {
 
         # strip path.
@@ -1399,9 +1399,9 @@ sub copyPackageFiles
         # if the file isn't already present in the destination then
         # copy it there. Copy only if source is non-empty.
         #
-        if ( !-e $dest . "/" . $file && -s "$src/$file" )
+        if ( ! -e "$dest/$file" && -s "$src/$file" )
         {
-            copy( $src . "/" . $file, $dest . "/" . $file );
+            copy( "$src/$file", "$dest/$file" );
         }
     }
 
