@@ -1374,7 +1374,7 @@ sub copyPackageFiles
 {
     my ( $src, $dest ) = (@_);
 
-    $CONFIG{ 'verbose' } && print "- archiving from $src - $dest\n";
+    $CONFIG{ 'verbose' } && print "+ archiving from $src - $dest\n";
 
     foreach my $file ( sort( glob( "$src/*.rpm" ) ) )
     {
@@ -1394,8 +1394,6 @@ sub copyPackageFiles
             copy( "$src/$file", "$dest/$file" );
         }
     }
-
-    $CONFIG{ 'verbose' } && print "+ archiving from $src - $dest\n";
 }
 
 
