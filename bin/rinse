@@ -736,6 +736,7 @@ EOF
         next if $line =~ /^#/;
         chomp($line);
 
+        # match distribution name, for e.g. [fedora-19]
         if ( $line =~ /^\[([^]]+)\]/ )
         {
             if ( lc($1) eq lc($dist) )
@@ -747,6 +748,7 @@ EOF
                 $indist = 0;
             }
         }
+        # match key=value pairs after distribution line
         elsif ( ( $line =~ /([^=]+)=([^\n]+)/ ) && $indist )
         {
             my $key = $1;
@@ -765,9 +767,9 @@ EOF
 
     #
     #  Did we find it?
-    #
-    my $key = "mirror.$arch";
-    return ( $options{ $key } ) if ( $options{ $key } );
+    #  Return value of mirror.$arch if it exists, otherwise value of mirror
+    my $mirarch = "mirror.$arch";
+    return ( $options{ $mirarch } ) if ( $options{ $mirarch } );
     return ( $options{ 'mirror' } ) if ( $options{ 'mirror' } );
 
     #
