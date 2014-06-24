@@ -833,6 +833,15 @@ sub downloadPackagesToDirectory
     my $count = 0;
     my $total = $#packages;
 
+    my $arch = $CONFIG{ 'arch' };
+    if ( $CONFIG{ 'arch' } eq 'amd64' ) {
+      $arch = 'x86_64';
+    }
+    # 32bit packages come in a variety of specific formats now
+    if ( $CONFIG{ 'arch' } eq 'i386' ) {
+      $arch = 'i386|i586|i686';
+    }
+
     #
     #  Process each package we're supposed to fetch.
     #
@@ -882,17 +891,6 @@ sub downloadPackagesToDirectory
             # ''                   The remainder part starts with '-'
             # <version>
             # <release>.<arch>.rpm
-
-            my $arch = $CONFIG{ 'arch' };
-            if ( $CONFIG{ 'arch' } eq 'amd64' )
-            {
-                $arch = 'x86_64';
-            }
-	    # 32bit packages come in a variety of specific formats now
-            if ( $CONFIG{ 'arch' } eq 'i386' )
-            {
-                $arch = 'i386|i586|i686';
-            }
 
             if ( $#remainder_parts != 2 ||
                  $remainder_parts[0] ne '' ||
