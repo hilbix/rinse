@@ -13,18 +13,6 @@ if [ ! -d "${prefix}" ]; then
 fi
 
 
-
-#
-#  1.  Make sure there is a resolv.conf file present, such that
-#     DNS lookups succeed.
-#
-echo "  Creating resolv.conf"
-if [ ! -d "${prefix}/etc/" ]; then
-    mkdir -p "${prefix}/etc/"
-fi
-cp /etc/resolv.conf "${prefix}/etc/"
-
-
 #
 #  2.  Copy the cached .RPM files into the yum directory, so that
 #     yum doesn't need to make them again.
@@ -71,15 +59,6 @@ EOF
 #  4.  Run "yum install yum".
 #
 
-echo "  Moving /bin/, /sbin/, /lib/ to /usr/"
-for dir in bin sbin lib lib64; do
-    if [ -d ${prefix}/${dir} ]; then
-	cp -a ${prefix}/${dir}/* ${prefix}/usr/${dir}/
-	rm -rf ${prefix}/${dir}
-	ln -s usr/${dir} ${prefix}/${dir}
-    fi
-done
-
 echo "  Priming the yum cache"
 if [ ! -d "${prefix}/var/cache/yum/core/packages/" ]; then
     mkdir -p ${prefix}/var/cache/yum/core/packages
@@ -87,7 +66,6 @@ fi
 cp $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
-chroot ${prefix} /usr/sbin/ldconfig
 chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient
 
 # Can use regular repositories now
