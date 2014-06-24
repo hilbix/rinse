@@ -660,10 +660,8 @@ EOF
     open( FILE, "<", $file ) or die "Failed to open $file - $!";
     foreach my $line (<FILE>)
     {
-        next if ( !$line );
-        chomp($line);
         next if ( $line =~ /^#/ );
-        next if ( !length($line) );
+        chomp($line);
 
         push( @packages, $line );
     }
@@ -674,10 +672,8 @@ EOF
         open( ADT, "<", $adt_file ) or die "Failed to open $adt_file - $!";
         foreach my $line (<ADT>)
         {
-            next if ( !$line );
-            chomp($line);
             next if ( $line =~ /^#/ );
-            next if ( !length($line) );
+            chomp($line);
 
             push( @packages, $line );
         }
@@ -732,7 +728,6 @@ EOF
 
     foreach my $line (<INPUT>)
     {
-        next if ( !$line || !length($line) );
         next if $line =~ /^#/;
         chomp($line);
 
