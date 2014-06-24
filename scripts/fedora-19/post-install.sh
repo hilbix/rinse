@@ -4,7 +4,6 @@
 #
 
 
-
 prefix=$1
 
 if [ ! -d "${prefix}" ]; then
@@ -18,12 +17,8 @@ fi
 #     yum doesn't need to make them again.
 #
 echo "  Setting up YUM cache"
-if [ ! -d ${prefix}/var/cache/yum/core/packages/ ]; then
-    mkdir -p ${prefix}/var/cache/yum/core/packages/
-fi
-if [ ! -d ${prefix}/var/cache/yum/updates-released/packages/ ]; then
-    mkdir -p ${prefix}/var/cache/yum/updates-released/packages/
-fi
+mkdir -p ${prefix}/var/cache/yum/core/packages/
+mkdir -p ${prefix}/var/cache/yum/updates-released/packages/
 
 for i in ${prefix}/*.rpm ; do
     cp $i ${prefix}/var/cache/yum/core/packages/
@@ -60,9 +55,6 @@ EOF
 #
 
 echo "  Priming the yum cache"
-if [ ! -d "${prefix}/var/cache/yum/core/packages/" ]; then
-    mkdir -p ${prefix}/var/cache/yum/core/packages
-fi
 cp $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
@@ -94,9 +86,7 @@ umount ${prefix}/sys
 #  6.  Remove the .rpm files from the prefix root.
 #
 echo "  Final tidy..."
-for i in ${prefix}/*.rpm; do
-    rm -f $i
-done
+rm -f ${prefix}/*.rpm
 find ${prefix} -name '*.rpmorig' -delete
 find ${prefix} -name '*.rpmnew' -delete
 
