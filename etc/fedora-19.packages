@@ -12,6 +12,7 @@ curl
 cyrus-sasl-lib
 elfutils-libelf
 expat
+fedora-release
 file-libs
 filesystem
 gamin
