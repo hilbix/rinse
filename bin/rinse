@@ -922,10 +922,7 @@ sub downloadPackagesToDirectory
                 print $msg;
 
                 # download - unless already present.
-                if ( !-e "$dir/$key" )
-                {
-                    system("wget --quiet -O $dir/$key $links{ $key }");
-                }
+            system("wget --quiet -O $dir/$key $links{ $key }") unless -e "$dir/$key";
             $CONFIG{ 'verbose' } && print "+Download $package\n";
             next PACKAGE;
         }
