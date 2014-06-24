@@ -848,7 +848,7 @@ sub downloadPackagesToDirectory
   PACKAGE:
     foreach my $package (@packages)
     {
-        $CONFIG{ 'verbose' } && print "-Download $package\n";
+        ! $CONFIG{ 'print-uris' } && $CONFIG{ 'verbose' } && print "-Download $package\n";
 
         #
         # Find the candidate package to download from our list of links.
@@ -908,9 +908,8 @@ sub downloadPackagesToDirectory
             if ( $CONFIG{ 'print-uris' } )
             {
                 print "$mirror/$key\n";
+                next PACKAGE;
             }
-            else
-            {
 
                 #
                 #  Print message and padding.
@@ -927,7 +926,6 @@ sub downloadPackagesToDirectory
                 {
                     system("wget --quiet -O $dir/$key $links{ $key }");
                 }
-            }
             $CONFIG{ 'verbose' } && print "+Download $package\n";
             next PACKAGE;
         }
