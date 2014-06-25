@@ -37,7 +37,7 @@ rinse - RPM Installation Entity.
 
    --cache               Should we use a local cache?  (Default is 1)
    --cache-dir           Specify the directory we should use for the cache.
-   --clean-cache         Clean our cache of .rpm files.
+   --clean-cache         Clean our cache of .rpm files, then exit.
    --config              Specify a different configuration file.
                          (Default is /etc/rinse/rinse.conf)
    --pkgs-dir            Specify a different directory containing
@@ -853,62 +853,14 @@ sub downloadPackagesToDirectory
         #
         # Find the candidate package to download from our list of links.
         #
-        foreach my $key ( keys %links )
-        {
+        # the grep should normally only return one key, so foreach may be obsolete
 
-            # Matching a package to a key from the URL relies on packages
-            # being named in the defacto RPM way:
-            #
-            #    <name>-<version>-<release>.<arch>.rpm
-            #
-            # Unfortunately the version and release are unknown (and can
-            # change) and therefore cannot be used to compare - they must
-            # be discarded.  The string can be split on '-' to find the
-            # version and release.  The name portion should exactly match
-            # the package and the remainder
+        foreach my $key (grep { $_ =~ /^$package-\d/ } keys %links) {
 
-            # See if the key is long enough to be split and still have
-            # '-<version>-<release>.<arch>.rpm'
-            if ( length($key) <= length($package) )
-            {
-                next;
-            }
 
-            my $name_part = substr( $key, 0, length($package) );
-
-            # See if the name part compares
-            if ( $name_part ne $package )
-            {
-                next;
-            }
-
-            my $remainder_part = substr( $key, length($package) );
-            my @remainder_parts = split( /-/, $remainder_part );
-
-            # See if there are exactly three elements leftover and if they are
-            # a reasonable approximation of what is expected:
-            #
-            # ''                   The remainder part starts with '-'
-            # <version>
-            # <release>.<arch>.rpm
-
-            if ( $#remainder_parts != 2 ||
-                 $remainder_parts[0] ne '' ||
-                 $remainder_parts[1] !~ /^[\d\w][\d\w.+]*$/ ||
-                 $remainder_parts[2] !~
-                 /^[\d\w][\d\w.+]*\.(${arch}|noarch)\.rpm$/ )
-            {
-
-                # Don't have enough parts or they don't look right
-                next;
-            }
-
-            # Match found!
-
-            if ( $CONFIG{ 'print-uris' } )
-            {
-                print "$mirror/$key\n";
-                next PACKAGE;
+            if ( $CONFIG{ 'print-uris' } ) {
+              print "$mirror/$key\n";
+              next PACKAGE;
             }
 
                 #
