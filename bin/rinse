@@ -854,11 +854,11 @@ sub downloadPackagesToDirectory
         #
         # the grep should normally only return one key, so foreach may be obsolete
 
-        foreach my $key (grep { /^$package-\d/ } keys %links) {
+        foreach my $key (grep { /^\Q$package-\E([^-]+)-([^-]+)\.(\w+)\.rpm$/ } keys %links) {
 
 
             if ( $CONFIG{ 'print-uris' } ) {
-              print "$mirror/$key\n";
+              print "$links{ $key}\n";
               next PACKAGE;
             }
 
@@ -1047,6 +1047,9 @@ sub findMirrorContentsInPage
 
             # store
             $links{ $link } = "$mirror/$link";
+            $links{ $link } =~ s#//#/#g; # remove duplicate slashes
+            $links{ $link } =~ s#^http:/#http://#; # except for http
+
         }
     }
 
