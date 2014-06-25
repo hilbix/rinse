@@ -20,7 +20,7 @@ if [ ! -d "${prefix}/etc/" ]; then
     mkdir -p "${prefix}/etc/"
 fi
 
-if ! grep -q localhost ${prefix}/etc/hosts ; then
+if ! grep -q localhost ${prefix}/etc/hosts 2>/dev/null; then
     echo "  Adding localhost entry"
     echo "127.0.0.1       localhost" >> ${prefix}/etc/hosts
 fi
