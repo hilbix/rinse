@@ -680,6 +680,9 @@ EOF
         close(ADT);
     }
 
+    # remove empty lines and lines with only spaces
+    @packages = grep {! /^\s*$/ } @packages;
+
     #
     #  Return the list in a sorted fashion.
     #
