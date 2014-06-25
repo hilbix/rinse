@@ -1,4 +1,4 @@
-rinse (3.0~beta6) UNRELEASED; urgency=low
+rinse (3.0~beta7) UNRELEASED; urgency=low
 
   * convert to a native Debian package
   * new rules file, adjust Makefile
