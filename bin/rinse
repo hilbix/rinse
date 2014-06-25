@@ -814,8 +814,7 @@ sub downloadPackagesToDirectory
         #
         if ( -d $cache )
         {
-            $CONFIG{ 'verbose' } &&
-              print "Copying files from cache directory: $cache\n";
+            print "Copying files from cache directory: $cache\n" if $CONFIG{ 'verbose' };
             copyPackageFiles( $cache, $dir );
         }
     }
@@ -855,7 +854,7 @@ sub downloadPackagesToDirectory
         #
         # the grep should normally only return one key, so foreach may be obsolete
 
-        foreach my $key (grep { $_ =~ /^$package-\d/ } keys %links) {
+        foreach my $key (grep { /^$package-\d/ } keys %links) {
 
 
             if ( $CONFIG{ 'print-uris' } ) {
@@ -895,14 +894,12 @@ sub downloadPackagesToDirectory
     #
     if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } )
     {
-        $CONFIG{ 'verbose' } &&
-          print "Copying files to cache directory: $cache\n";
+      print "Copying files to cache directory: $cache\n" if $CONFIG{ 'verbose' };
 
         #
         #  Make sure we have a cache directory.
         #
-        mkpath( $cache, 0, 0755 ) if ( !-d $cache );
-
+        mkpath( $cache, 0, 0755 ) unless -d $cache;
         copyPackageFiles( $dir, $cache );
     }
 }
@@ -1202,8 +1199,8 @@ sub unpackPackages
     #
     if ( $postcmd ne "" )
     {
-        system($postcmd);
         $CONFIG{ 'verbose' } && print "+execute $postcmd\n";
+        system($postcmd);
     }
 }
 
@@ -1280,21 +1277,9 @@ sub postInstallationCustomization
 
         foreach my $file ( sort( glob( "$script/*" ) ) )
         {
-            $CONFIG{ 'verbose' } && print "-script $file\n";
-
-            #
-            #  Report on progress all the time.
-            #
-            my $name = $file;
-            if ( $name =~ /(.*)\/(.*)/ )
-            {
-                $name = $2;
-            }
-            print "Running post-install script $name:\n";
+            print "Running post-install script $file:\n";
             my $cmd = "$file $prefix";
             system($cmd );
-
-            $CONFIG{ 'verbose' } && print "+script $file\n";
         }
     }
 
@@ -1373,10 +1358,7 @@ sub getTerminalSize
     # then we will use the defaults sizes.
     #
     eval($testModule);
-    if ($@)
-    {
-    }
-    else
+    unless ($@)
     {
 
         #
@@ -1425,5 +1407,5 @@ sub uri_unescape
         return @str;
     }
     $str =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg if defined $str;
-    $str;
+    return $str;
 }
