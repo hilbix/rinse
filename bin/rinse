@@ -817,7 +817,7 @@ sub downloadPackagesToDirectory
         #
         if ( -d $cache )
         {
-            print "Copying files from cache directory: $cache\n" if $CONFIG{ 'verbose' };
+            print "Copying rpm's from cache $cache to $dir\n" if $CONFIG{ 'verbose' };
             copyPackageFiles( $cache, $dir );
         }
     }
@@ -897,7 +897,7 @@ sub downloadPackagesToDirectory
     #
     if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } )
     {
-      print "Copying files to cache directory: $cache\n" if $CONFIG{ 'verbose' };
+      print "Copying rpm's from $dir to cache $cache\n" if $CONFIG{ 'verbose' };
 
         #
         #  Make sure we have a cache directory.
@@ -1316,8 +1316,6 @@ sub postInstallationCustomization
 sub copyPackageFiles
 {
     my ( $src, $dest ) = (@_);
-
-    $CONFIG{ 'verbose' } && print "+ archiving from $src - $dest\n";
 
     foreach my $file ( sort( glob( "$src/*.rpm" ) ) )
     {
