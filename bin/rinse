@@ -805,6 +805,7 @@ sub downloadPackagesToDirectory
     #
     my $cache = "$CONFIG{'cache-dir'}/$CONFIG{'distribution'}.$CONFIG{'arch'}/";
 
+    my $msg;
     #
     #  Unless we've been told not to then copy packages from
     # the cache.
@@ -833,7 +834,7 @@ sub downloadPackagesToDirectory
     # Used purely for the status updates..
     #
     my $count = 0;
-    my $total = $#packages;
+    my $total = $#packages +1 ;
 
     my $arch = $CONFIG{ 'arch' };
     if ( $CONFIG{ 'arch' } eq 'amd64' ) {
@@ -844,13 +845,17 @@ sub downloadPackagesToDirectory
       $arch = 'i386|i586|i686';
     }
 
+    my $old_fh = select(STDOUT);
+    $| = 1;
     #
     #  Process each package we're supposed to fetch.
     #
   PACKAGE:
     foreach my $package (@packages)
     {
-        ! $CONFIG{ 'print-uris' } && $CONFIG{ 'verbose' } && print "-Download $package\n";
+      $count ++;
+
+#        ! $CONFIG{ 'print-uris' } && $CONFIG{ 'verbose' } && print "-Download $package\n";
 
         #
         # Find the candidate package to download from our list of links.
@@ -868,24 +873,25 @@ sub downloadPackagesToDirectory
                 #
                 #  Print message and padding.
                 #
-                my $msg = "\r[$count:$total] Downloading: $key ..";
+            if ( -e "$dir/$key") {
+              $msg = "\r[$count:$total] Copy from cache: $key ..";
+            } else {
+              $msg = "\r[$count:$total] Downloading    : $key ..";
+            }
                 while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) )
                 {
                     $msg .= " ";
                 }
-                print $msg;
+            print $msg;
 
                 # download - unless already present.
             system("wget --quiet -O $dir/$key $links{ $key }") unless -e "$dir/$key";
-            $CONFIG{ 'verbose' } && print "+Download $package\n";
             next PACKAGE;
         }
         print "[Harmless] Failed to find download link for $package\n";
-    }
-    continue
-    {
-        $count += 1;
-    }
+      }
+
+    select($old_fh);
 
     # newline.
     print "\r";
@@ -1156,7 +1162,6 @@ sub unpackPackages
     #
     foreach my $file (@rpms)
     {
-        $CONFIG{ 'verbose' } && print "-extract $file\n";
 
         #
         #  Show status
@@ -1170,7 +1175,7 @@ sub unpackPackages
         #
         #  Show status output.
         #
-        my $msg = "\rExtracting .rpm file : $name";
+        my $msg = "\rExtracting: $name";
         while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) )
         {
             $msg .= " ";
@@ -1187,10 +1192,9 @@ sub unpackPackages
             my $rpmname = basename($file);
             $postcmd =
               "cp $file $CONFIG{'directory'}/tmp ; chroot $CONFIG{'directory'} rpm -ivh --force --nodeps /tmp/$rpmname ; rm $CONFIG{'directory'}/tmp/$rpmname";
-        }
+          }
         system($cmd );
 
-        $CONFIG{ 'verbose' } && print "+extract $file\n";
     }
     print "\r";
     print " " x $CONFIG{ 'width' };
@@ -1205,7 +1209,7 @@ sub unpackPackages
     #
     if ( $postcmd ne "" )
     {
-        $CONFIG{ 'verbose' } && print "+execute $postcmd\n";
+        $CONFIG{ 'verbose' } && print "+execute postcmd $postcmd\n";
         system($postcmd);
     }
 }
