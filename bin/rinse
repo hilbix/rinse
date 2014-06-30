@@ -1287,8 +1287,6 @@ sub postInstallationCustomization
     #
     foreach my $script ( @scripts )
     {
-        $CONFIG{'verbose'} && print "Dir: $script\n";
-
         foreach my $file ( sort( glob( "$script/*" ) ) )
         {
             print "Running post-install script $file:\n";
