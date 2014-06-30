@@ -21,8 +21,8 @@ mkdir -p ${prefix}/var/cache/yum/core/packages/
 mkdir -p ${prefix}/var/cache/yum/updates-released/packages/
 
 for i in ${prefix}/*.rpm ; do
-    cp $i ${prefix}/var/cache/yum/core/packages/
-    cp $i ${prefix}/var/cache/yum/updates-released/packages/
+    cp -p $i ${prefix}/var/cache/yum/core/packages/
+    cp -p $i ${prefix}/var/cache/yum/updates-released/packages/
 done
 
 
@@ -55,7 +55,7 @@ EOF
 #
 
 echo "  Priming the yum cache"
-cp $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
+cp -puv $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 echo "  Bootstrapping yum"
 chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient
@@ -86,7 +86,8 @@ umount ${prefix}/sys
 #  6.  Remove the .rpm files from the prefix root.
 #
 echo "  Final tidy..."
-rm -f ${prefix}/*.rpm
+rm -f ${prefix}/*.rpm ${prefix}/var/cache/yum/core/packages/*.rpm ${prefix}/var/cache/yum/updates-released/packages/*.rpm
+
 find ${prefix} -name '*.rpmorig' -delete
 find ${prefix} -name '*.rpmnew' -delete
 
