@@ -23,7 +23,6 @@ fi
 #  Mount /proc + /sys
 #
 for i in /proc /sys; do
-    echo "  Mounting $i"
     if [ ! -d "${prefix}/$i" ]; then
         mkdir -p "${prefix}/$i"
     fi

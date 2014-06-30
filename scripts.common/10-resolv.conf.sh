@@ -21,10 +21,8 @@ if [ ! -d "${prefix}/etc/" ]; then
 fi
 
 if ! grep -q localhost ${prefix}/etc/hosts 2>/dev/null; then
-    echo "  Adding localhost entry"
     echo "127.0.0.1       localhost" >> ${prefix}/etc/hosts
 fi
 
-echo "  Creating resolv.conf"
 cp /etc/resolv.conf "${prefix}/etc/"
 
