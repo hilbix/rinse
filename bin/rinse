@@ -1209,7 +1209,11 @@ sub unpackPackages
     #
     if ( $postcmd ne "" )
     {
-        $CONFIG{ 'verbose' } && print "+execute postcmd $postcmd\n";
+      if ($CONFIG{ 'verbose' }) {
+        print "Execute postcmd $postcmd\n";
+      } else {
+        print "Execute postcmd of *-release package\n";
+      }
         system($postcmd);
     }
 }
