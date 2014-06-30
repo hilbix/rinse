@@ -82,6 +82,7 @@ pcre
 popt
 procps
 psmisc
+pygpgme
 python
 python-libs
 python-pycurl
