@@ -1,6 +1,6 @@
 #
 #  packages which we will need to download for a minimal installation for
-#  CentOS 6.0
+#  CentOS 6.x
 #
 
 MAKEDEV
@@ -105,7 +105,6 @@ xz-libs
 yum
 yum-plugin-fastestmirror
 yum-plugin-keys
-yum-plugin-protect-packages
 yum-plugin-protectbase
 yum-metadata-parser
 yum-utils
