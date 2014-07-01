@@ -5,15 +5,11 @@
 
 
 aaa_base
-audit-libs
 bash
-boost-license
 bzip2
 ConsoleKit
 coreutils
-coreutils-lang
 cpio
-cpio-lang
 cracklib
 cracklib-dict-small
 cyrus-sasl
@@ -31,11 +27,8 @@ findutils
 gawk
 gdbm
 glib2
-glib2-lang
-glib2-branding-upstream
 glibc
 gpg2
-gpg2-lang
 grep
 gzip
 hal
@@ -43,15 +36,14 @@ info
 insserv
 keyutils-libs
 krb5
+libcap2
 libacl
 libattr
-libboost_signals1_36_0
 libbz2-1
 libcom_err2
 libcurl4
 libdb-4_5
 libexpat1
-libgcc43
 libgcrypt11
 libglib-2_0-0
 libgobject-2_0-0
@@ -68,17 +60,14 @@ libreiserfs
 libselinux1
 libsepol1
 libsmbios2
-libstdc++43
 libusb-0_1-4
 libuuid1
-libvolume_id1
 libxcrypt
 libxml2
 libxml2-python
 libzio
 libzypp
 login
-makedev
 mingetty
 module-init-tools
 ncurses-utils
@@ -97,14 +86,10 @@ perl-base
 permissions
 pinentry
 pm-utils
-pmtools
-popt
 procps
 psmisc
-pth
 pwdutils
 python
-python-urlgrabber
 rpm
 rpm-python
 satsolver-tools
@@ -115,7 +100,6 @@ termcap
 terminfo-base
 udev
 util-linux
-uuid-runtime
 zlib
 zypper
 
