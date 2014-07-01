@@ -11,4 +11,4 @@ version=3
 #  The link to the download location, followed by the regular expression
 # to match release tarballs.
 #
-http://www.steve.org.uk/Software/rinse/rinse-([\d\.]+)\.tar\.gz
+http://collab-maint.alioth.debian.org/rinse/download/rinse-([\d\.]+)\.tar\.gz
