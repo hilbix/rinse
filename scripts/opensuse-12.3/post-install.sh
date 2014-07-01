@@ -11,34 +11,14 @@ if [ ! -d "${prefix}" ]; then
 fi
 
 
-# There's no pre-existing /dev/zero nor is there one from the packages that are already unpacked.
-echo "  Creating devices in /dev"
-if ! [ -e "${prefix}/dev/zero" ]; then
-    mknod -m 666 "${prefix}/dev/zero" c 1 5
-fi
-
-#
-#  1.  Make sure there is a resolv.conf file present, such that
-#     DNS lookups succeed.
-#
-echo "  Creating resolv.conf"
-if [ ! -d "${prefix}/etc/" ]; then
-    mkdir -p "${prefix}/etc/"
-fi
-cp /etc/resolv.conf "${prefix}/etc/"
-
-
 #
 #  2.  Copy the cached .RPM files into the zypper directory, so that
 #     zypper doesn't need to fetch them again.
 #
 echo "  Setting up zypper cache"
 
-if [ ! -d "${prefix}/var/cache/zypp/packages/opensuse/suse/${arch}" ]; then
-    mkdir -p ${prefix}/var/cache/zypp/packages/opensuse/suse/${arch}
-fi
-cp ${cache_dir}/${dist}.${ARCH}/* ${prefix}/var/cache/zypp/packages/opensuse/suse/${arch}
-
+mkdir -p ${prefix}/var/cache/zypp/packages/opensuse/suse/${ARCH}
+cp -p ${cache_dir}/${dist}.${ARCH}/* ${prefix}/var/cache/zypp/packages/opensuse/suse/${ARCH}
 
 #
 #  3.  Ensure that zypper has a working configuration file.
@@ -68,14 +48,8 @@ fi
 #
 #  4.  Run "zypper install zypper".
 #
-echo "  Mounting /proc"
-if [ ! -d "${prefix}/proc" ]; then
-    mkdir -p "${prefix}/proc"
-fi
-mount -o bind /proc ${prefix}/proc
 
 echo "  Bootstrapping zypper"
-chroot ${prefix} /sbin/ldconfig
 
 # No /etc/passwd at this point
 cat > ${prefix}/etc/passwd <<EOT
@@ -105,38 +79,29 @@ EOT
 chroot ${prefix} /usr/bin/zypper -n --gpg-auto-import-keys refresh --force-download
 
 # Sets permissions correctly and provides /etc/sysconfig/security that many things want
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install permissions    2>&1
+#chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install permissions    2>&1
 
 # The base system
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install aaa_base module-init-tools    2>&1
 
 # The installer
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper      2>&1
-
-# Other required tools
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install iputils     2>&1
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install vim         2>&1
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install e2fsprogs   2>&1
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install syslog-ng   2>&1
+chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install vim syslog-ng 2>&1
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks update              2>&1
-
+chroot ${prefix} /usr/bin/zypper clean
 
 #
 #  5.  Clean up
 #
 echo "  Cleaning up"
-chroot ${prefix} /usr/bin/zypper clean
 umount ${prefix}/proc
-
-echo "  Ending uuidd"
-pkill uuidd
+umount ${prefix}/sys
 
 #
 #  6.  Remove the .rpm files from the prefix root.
 #
-echo "  Final tidy..."
-for i in ${prefix}/*.rpm; do
-    rm -f $i
-done
+
+rm -f  ${prefix}/*.rpm ${prefix}/var/cache/zypp/packages/opensuse/suse/${ARCH}
+
 find ${prefix} -name '*.rpmorig' -delete
 find ${prefix} -name '*.rpmnew' -delete
