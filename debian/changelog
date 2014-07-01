@@ -1,4 +1,4 @@
-rinse (3.0~beta12) UNRELEASED; urgency=low
+rinse (3.0~beta13) UNRELEASED; urgency=low
 
   * add subroutin updaterpmdb, which fixes the status of the packages
     inside the target
