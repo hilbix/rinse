@@ -4,7 +4,7 @@ Section: admin
 Priority: extra
 Standards-Version: 3.9.3
 Build-Depends: debhelper (>= 7)
-Homepage: XXXXXXXXXX
+Homepage: http://collab-maint.alioth.debian.org/rinse/
 Vcs-Git: git://git.debian.org/git/collab-maint/rinse.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/rinse.git
 
