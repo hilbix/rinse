@@ -312,6 +312,9 @@ exit if ( $CONFIG{ 'print-uris' } );
 #
 unpackPackages( $CONFIG{ 'directory' } );
 
+# update the rpm database
+updaterpmdb($CONFIG{'directory'});
+
 
 #
 #  Now run the post-installation customisation.
@@ -1132,6 +1135,28 @@ sub downloadURL
     }
 }
 
+
+
+=begin doc
+
+  update the rpm db so that all packages extracted are also known as installed inside the target
+
+=end doc
+
+=cut
+
+sub updaterpmdb {
+
+  my $dir = shift;
+
+  #  Get a list of the RPMs without the prefix path
+  my @rpms = glob( "$dir/*.rpm" );
+  @rpms = map {s#.+/##; $_} @rpms; # remove path
+
+  foreach my $file (@rpms) {
+    system ("chroot $CONFIG{'directory'} rpm -i --nodeps --justdb $file  2>/dev/null >/dev/null");
+  }
+}
 
 
 =begin doc
