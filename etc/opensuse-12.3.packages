@@ -1,11 +1,7 @@
 augeas-lenses
 bash
-bash-doc
 bridge-utils
-bundle-lang-common-en
 bzip2
-ca-certificates
-ca-certificates-mozilla
 coreutils
 cpio
 cracklib
@@ -37,7 +33,6 @@ insserv-compat
 iproute2
 kbd
 kmod
-kmod-compat
 krb5
 libacl1
 libadns1
@@ -121,7 +116,6 @@ openssl
 pam
 pam-config
 perl
-perl-Bootloader
 perl-base
 perl-gettext
 permissions
@@ -129,14 +123,11 @@ pinentry
 procps
 python
 python-base
-readline-doc
 rpm
 sed
 shadow
-suse-module-tools
 sysconfig
 systemd
-systemd-presets-branding-openSUSE
 systemd-sysvinit
 sysvinit-tools
 terminfo-base
@@ -147,5 +138,3 @@ util-linux
 vlan
 xz
 zypper
-zypper-aptitude
-zypper-log
