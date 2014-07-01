@@ -38,6 +38,9 @@ cp -pu $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 # A correct mirror URL does not contain /Packages on the end
 mirror=`dirname $mirror`
 
+# save original yum.conf
+mv ${prefix}/etc/yum.conf ${prefix}/etc/yum.conf.orig
+
 cat > ${prefix}/etc/yum.conf <<EOF
 [main]
 reposdir=/dev/null
@@ -56,15 +59,14 @@ EOF
 echo "  Bootstrapping yum"
 chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient
 
-# Can use regular repositories now
-cat > ${prefix}/etc/yum.conf <<EOF
-[main]
-logfile=/var/log/yum.log
-gpgcheck=1
+# restore original yum.conf
+mv ${prefix}/etc/yum.conf.orig ${prefix}/etc/yum.conf
 
-# PUT YOUR REPOS HERE OR IN separate files named file.repo
-# in /etc/yum.repos.d
-EOF
+
+# If you get this error, then replace https with http in /etc/yum.repos.d/*
+# Error: Cannot retrieve metalink for repository: fedora/19/x86_64. Please verify its path and try again
+#
+# sed -i -e 's/https/https' ${prefix}/etc/yum.repos.d/*
 
 
 #
