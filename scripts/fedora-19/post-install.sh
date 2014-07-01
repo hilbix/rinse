@@ -11,10 +11,14 @@ if [ ! -d "${prefix}" ]; then
   exit
 fi
 
+arch=i386
+if [ $ARCH = "amd64" ] ; then
+    arch=x86_64
+fi
 
 #
 #  2.  Copy the cached .RPM files into the yum directory, so that
-#     yum doesn't need to make them again.
+#     yum doesn't need to download them again.
 #
 echo "  Setting up YUM cache"
 mkdir -p ${prefix}/var/cache/yum/core/packages/
@@ -23,20 +27,17 @@ for i in ${prefix}/*.rpm ; do
     cp -p $i ${prefix}/var/cache/yum/core/packages/
 done
 
+cp -pu $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
 
 
 #
 #  3.  Ensure that Yum has a working configuration file.
 #
-arch=i386
-if [ $ARCH = "amd64" ] ; then
-    arch=x86_64
-fi
 
+# use the mirror URL which was specified in rinse.conf
 # A correct mirror URL does not contain /Packages on the end
 mirror=`dirname $mirror`
 
-echo "  Creating initial yum.conf"
 cat > ${prefix}/etc/yum.conf <<EOF
 [main]
 reposdir=/dev/null
@@ -52,14 +53,10 @@ EOF
 #  4.  Run "yum install yum".
 #
 
-echo "  Priming the yum cache"
-cp -pu $cache_dir/$dist.$ARCH/* ${prefix}/var/cache/yum/core/packages/
-
 echo "  Bootstrapping yum"
 chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient
 
 # Can use regular repositories now
-echo "  Creating final yum.conf"
 cat > ${prefix}/etc/yum.conf <<EOF
 [main]
 logfile=/var/log/yum.log
@@ -73,7 +70,6 @@ EOF
 #
 #  5.  Clean up
 #
-echo "  Cleaning up"
 chroot ${prefix} /usr/bin/yum clean all
 
 umount ${prefix}/proc
@@ -83,9 +79,7 @@ umount ${prefix}/sys
 #
 #  6.  Remove the .rpm files from the prefix root.
 #
-echo "  Final tidy..."
 rm -f ${prefix}/*.rpm ${prefix}/var/cache/yum/core/packages/*.rpm
 
 find ${prefix} -name '*.rpmorig' -delete
 find ${prefix} -name '*.rpmnew' -delete
-
