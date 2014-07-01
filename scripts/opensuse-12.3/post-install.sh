@@ -15,7 +15,6 @@ fi
 #  2.  Copy the cached .RPM files into the zypper directory, so that
 #     zypper doesn't need to fetch them again.
 #
-echo "  Setting up zypper cache"
 
 mkdir -p ${prefix}/var/cache/zypp/packages/opensuse/suse/${ARCH}
 cp -p ${cache_dir}/${dist}.${ARCH}/* ${prefix}/var/cache/zypp/packages/opensuse/suse/${ARCH}
@@ -28,12 +27,11 @@ if [ $ARCH = "amd64" ] ; then
     arch=x86_64
 fi
 
-echo "  Creating zypper repo entry"
 [ -d "${prefix}/etc/zypp/repos.d" ] || mkdir -p ${prefix}/etc/zypp/repos.d
 cat > ${prefix}/etc/zypp/repos.d/${dist}.repo <<EOF
 [opensuse]
 name=${dist}
-baseurl=$(dirname $(dirname ${mirror}))
+baseurl=$(dirname ${mirror})
 enabled=1
 gpgcheck=1
 
@@ -83,17 +81,13 @@ chroot ${prefix} /usr/bin/zypper -n --gpg-auto-import-keys refresh --force-downl
 
 # The base system
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install aaa_base module-init-tools    2>&1
-
-# The installer
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper      2>&1
-chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install vim syslog-ng 2>&1
+chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper vim syslog-ng     2>&1
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks update              2>&1
 chroot ${prefix} /usr/bin/zypper clean
 
 #
 #  5.  Clean up
 #
-echo "  Cleaning up"
 umount ${prefix}/proc
 umount ${prefix}/sys
 
