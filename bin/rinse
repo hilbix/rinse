@@ -238,15 +238,13 @@ parseCommandLineArguments();
 #
 #  Handle special case first.
 #
-if ( $CONFIG{ 'list-distributions' } )
-{
-    listDistributions();
-    exit;
+if ( $CONFIG{'list-distributions'} ) {
+  listDistributions();
+  exit;
 }
-if ( $CONFIG{ 'clean-cache' } )
-{
-    cleanCache();
-    exit;
+if ( $CONFIG{'clean-cache'} ) {
+  cleanCache();
+  exit;
 }
 
 
@@ -266,13 +264,10 @@ testRootUser() unless ( $CONFIG{ 'print-uris' } );
 #
 #  Make sure the directory we're installing into exists.
 #
-if ( ( !$CONFIG{ 'print-uris' } ) && ( !-d $CONFIG{ 'directory' } ) )
-{
+if ( ( !$CONFIG{ 'print-uris' } ) && ( !-d $CONFIG{ 'directory' } ) ) {
 
-    #
-    # Make the directory, including all required parent(s) directories.
-    #
-    mkpath( $CONFIG{ 'directory' }, 0, 0755 );
+  # Make the directory, including all required parent(s) directories.
+  mkpath( $CONFIG{'directory'}, 0, 0755 );
 }
 
 
@@ -285,10 +280,8 @@ my @packages = getDistributionPackageList( $CONFIG{ 'distribution' } );
 #
 #  Find the mirror, if not specified already.
 #
-if ( !$CONFIG{ 'mirror' } )
-{
-    $CONFIG{ 'mirror' } =
-      getDistributionMirror( $CONFIG{ 'distribution' }, $CONFIG{ 'arch' } );
+if ( !$CONFIG{'mirror'} ) {
+  $CONFIG{'mirror'} = getDistributionMirror( $CONFIG{'distribution'}, $CONFIG{'arch'} );
 }
 
 
@@ -300,10 +293,8 @@ downloadPackagesToDirectory( $CONFIG{ 'directory' },
                              $CONFIG{ 'mirror' }, @packages );
 
 
-#
 #  If we're only printing then exit here.
-#
-exit if ( $CONFIG{ 'print-uris' } );
+exit if ( $CONFIG{'print-uris'} );
 
 
 #
@@ -318,8 +309,8 @@ updaterpmdb($CONFIG{'directory'});
 #
 #  Now run the post-installation customisation.
 #
-postInstallationCustomization( $CONFIG{ 'distribution' },
-                               $CONFIG{ 'directory' } );
+postInstallationCustomization( $CONFIG{'distribution'},
+                               $CONFIG{'directory'} );
 
 
 #
@@ -341,22 +332,18 @@ exit;
 
 =cut
 
-sub testSetup
-{
+sub testSetup {
 
-    my @required = qw/ rpm rpm2cpio wget /;
+  my @required = qw/ rpm rpm2cpio wget /;
 
-    foreach my $file (@required)
-    {
-        if ( ( !-x "/bin/$file" ) &&
-             ( !-x "/usr/bin/$file" ) )
-        {
-            print "The following (required) binary appears to be missing:\n";
-            print "\t$file\n";
-            print "Aborting...\n";
-            exit;
-        }
+  foreach my $file (@required) {
+    if ( ( !-x "/bin/$file" ) && ( !-x "/usr/bin/$file" ) ) {
+      print "The following (required) binary appears to be missing:\n";
+      print "\t$file\n";
+      print "Aborting...\n";
+      exit;
     }
+  }
 }
 
 
@@ -369,11 +356,10 @@ sub testSetup
 
 =cut
 
-sub testRootUser
-{
-    if ( $EFFECTIVE_USER_ID != 0 )
-    {
-        print <<E_O_ROOT;
+sub testRootUser {
+
+  if ( $EFFECTIVE_USER_ID != 0 ) {
+      print <<E_O_ROOT;
 
   In order to use this script you must be running with root privileges.
 
@@ -381,7 +367,7 @@ sub testRootUser
   chroot, etc.
 
 E_O_ROOT
-        exit;
+      exit;
     }
 }
 
@@ -395,8 +381,8 @@ E_O_ROOT
 
 =cut
 
-sub parseCommandLineArguments
-{
+sub parseCommandLineArguments {
+
     my $HELP    = 0;
     my $MANUAL  = 0;
     my $VERSION = 0;
@@ -439,10 +425,9 @@ sub parseCommandLineArguments
     pod2usage( -verbose => 2 ) if $MANUAL;
 
 
-    if ($VERSION)
-    {
-        print("rinse release $RELEASE\n");
-        exit;
+    if ($VERSION) {
+      print("rinse release $RELEASE\n");
+      exit;
     }
 }
 
@@ -458,15 +443,13 @@ sub parseCommandLineArguments
 
 =cut
 
-sub sanityCheckArguments
-{
+sub sanityCheckArguments {
 
     #
     #  Distribution is mandatory
     #
-    if ( !$CONFIG{ 'distribution' } )
-    {
-        print <<EOF;
+    if ( !$CONFIG{ 'distribution' } ) {
+      print <<EOF;
 
   The name of the distribution to install is mandatory.
 
@@ -475,7 +458,7 @@ sub sanityCheckArguments
 $0 --list-distributions
 
 EOF
-        exit;
+      exit;
     }
 
 
@@ -484,25 +467,21 @@ EOF
     # the URLs we'd download
     #
     if ( ( !$CONFIG{ 'directory' } ) &&
-         ( !$CONFIG{ 'print-uris' } ) )
-    {
-        print <<EOF;
+         ( !$CONFIG{ 'print-uris' } ) ) {
+      print <<EOF;
 
   The directory to install into is mandatory.  Please specify one with
  --directory
 
 EOF
-        exit;
+      exit;
     }
 
-    if ( $CONFIG{ 'arch' } )
-    {
-        if ( ( $CONFIG{ 'arch' } ne "i386" ) &&
-             ( $CONFIG{ 'arch' } ne "amd64" ) &&
-             ( $CONFIG{ 'arch' } ne "x86_64" ) )
-
-        {
-            print <<EOARCH;
+    if ( $CONFIG{ 'arch' } ) {
+      if ( ( $CONFIG{ 'arch' } ne "i386" ) &&
+           ( $CONFIG{ 'arch' } ne "amd64" ) &&
+           ( $CONFIG{ 'arch' } ne "x86_64" ) ) {
+        print <<EOARCH;
 
   Only two architectures are supported:
 
@@ -510,8 +489,8 @@ EOF
    amd64 or x86_64
 
 EOARCH
-            exit;
-        }
+        exit;
+      }
     } else
 
     #
@@ -537,8 +516,8 @@ EOF
 
 =cut
 
-sub listDistributions
-{
+sub listDistributions {
+
     my @avail;
 
     #
@@ -548,25 +527,21 @@ sub listDistributions
     #
     #  2.  A scripts directory.  (Even if empty!)
     #
-    foreach my $file ( glob("$CONFIG{'pkgs-dir'}/*.packages") )
-    {
+    foreach my $file ( glob("$CONFIG{'pkgs-dir'}/*.packages") ) {
 
         #
         #  Get the name - so that we can test for the directory.
         #
-        if ( $file =~ /^(.*)\/(.*)\.packages$/ )
-        {
-            push @avail, $2 if ( -d "/usr/lib/rinse/$2" );
-        }
+      if ( $file =~ /^(.*)\/(.*)\.packages$/ ) {
+        push @avail, $2 if ( -d "/usr/lib/rinse/$2" );
+      }
     }
 
-    if (@avail)
-    {
-        print "The following distributions are available:\n";
-        foreach my $a (@avail)
-        {
-            print "\t$a\n";
-        }
+    if (@avail) {
+      print "The following distributions are available:\n";
+      foreach my $a (@avail) {
+        print "\t$a\n";
+      }
     }
 }
 
@@ -580,21 +555,20 @@ sub listDistributions
 
 =cut
 
-sub cleanCache
-{
+sub cleanCache {
+
     my $dir = $CONFIG{ 'cache-dir' };
 
     #
     #  Nested function to remove .rpm files.
     #
-    sub removePackages
-    {
-        my $file = $File::Find::name;
-        if ( $file =~ /\.rpm$/ )
-        {
-            $CONFIG{ 'verbose' } && print "Removing: $file\n";
-            unlink($file);
-        }
+    sub removePackages {
+
+      my $file = $File::Find::name;
+      if ( $file =~ /\.rpm$/ ) {
+        $CONFIG{ 'verbose' } && print "Removing: $file\n";
+        unlink($file);
+      }
     }
 
     #
@@ -617,8 +591,8 @@ sub cleanCache
 
 =cut
 
-sub getDistributionPackageList
-{
+sub getDistributionPackageList {
+
     my ($distribution) = (@_);
 
     my $file = "$CONFIG{'pkgs-dir'}/$distribution.packages";
@@ -626,9 +600,8 @@ sub getDistributionPackageList
     my @additional;
     my $adt_file = $CONFIG{ 'add-pkg-list' };
 
-    if ( !-e $file )
-    {
-        print <<EOF;
+    if ( !-e $file ) {
+      print <<EOF;
 
   The package list for the distribution $distribution was not found.
 
@@ -639,18 +612,17 @@ sub getDistributionPackageList
   Aborting.
 
 EOF
-        exit;
+      exit;
     }
 
-    if ( ($adt_file) && ( !-e $adt_file ) )
-    {
-        print <<EOF;
+    if ( ($adt_file) && ( !-e $adt_file ) ) {
+      print <<EOF;
   The file $adt_file was not found.
 
   Aborting.
 
 EOF
-        exit;
+      exit;
     }
 
     #
@@ -660,26 +632,21 @@ EOF
 
 
     open( FILE, "<", $file ) or die "Failed to open $file - $!";
-    foreach my $line (<FILE>)
-    {
-        next if ( $line =~ /^#/ );
-        chomp($line);
-
-        push( @packages, $line );
+    foreach my $line (<FILE>) {
+      next if ( $line =~ /^#/ );
+      chomp($line);
+      push( @packages, $line );
     }
     close(FILE);
 
-    if ($adt_file)
-    {
-        open( ADT, "<", $adt_file ) or die "Failed to open $adt_file - $!";
-        foreach my $line (<ADT>)
-        {
-            next if ( $line =~ /^#/ );
-            chomp($line);
-
-            push( @packages, $line );
-        }
-        close(ADT);
+    if ($adt_file) {
+      open( ADT, "<", $adt_file ) or die "Failed to open $adt_file - $!";
+      foreach my $line (<ADT>) {
+        next if ( $line =~ /^#/ );
+        chomp($line);
+        push( @packages, $line );
+      }
+      close(ADT);
     }
 
     # remove empty lines and lines with only spaces
@@ -701,22 +668,21 @@ EOF
 
 =cut
 
-sub getDistributionMirror
-{
+sub getDistributionMirror {
+
     my ( $dist, $arch ) = (@_);
 
     my $file = $CONFIG{ 'config' };
 
-    if ( !-e $file )
-    {
-        print <<EOF;
+    if ( !-e $file ) {
+      print <<EOF;
 
   The configuration file $CONFIG{'config'} was not found.
 
   Aborting.
 
 EOF
-        exit;
+      exit;
     }
 
     open( INPUT, "<", $file ) or die "Failed to open $file - $!";
@@ -731,37 +697,31 @@ EOF
     #
     my %options;
 
-    foreach my $line (<INPUT>)
-    {
-        next if $line =~ /^#/;
-        chomp($line);
+    foreach my $line (<INPUT>) {
+      next if $line =~ /^#/;
+      chomp($line);
 
         # match distribution name, for e.g. [fedora-19]
-        if ( $line =~ /^\[([^]]+)\]/ )
-        {
-            if ( lc($1) eq lc($dist) )
-            {
-                $indist = 1;
-            }
-            else
-            {
-                $indist = 0;
-            }
+      if ( $line =~ /^\[([^]]+)\]/ ) {
+        if ( lc($1) eq lc($dist) ) {
+          $indist = 1;
+        } else {
+          $indist = 0;
         }
+      }
         # match key=value pairs after distribution line
-        elsif ( ( $line =~ /([^=]+)=([^\n]+)/ ) && $indist )
-        {
-            my $key = $1;
-            my $val = $2;
+      elsif ( ( $line =~ /([^=]+)=([^\n]+)/ ) && $indist ) {
+        my $key = $1;
+        my $val = $2;
 
-            # Strip leading and trailing whitespace.
-            $key =~ s/^\s+//;
-            $key =~ s/\s+$//;
-            $val =~ s/^\s+//;
-            $val =~ s/\s+$//;
+        # Strip leading and trailing whitespace.
+        $key =~ s/^\s+//;
+        $key =~ s/\s+$//;
+        $val =~ s/^\s+//;
+        $val =~ s/\s+$//;
 
-            $options{ $key } = $val;
-        }
+        $options{ $key } = $val;
+      }
     }
     close(INPUT);
 
@@ -798,8 +758,8 @@ EOF
 
 =cut
 
-sub downloadPackagesToDirectory
-{
+sub downloadPackagesToDirectory {
+
     my ( $dir, $mirror, @packages ) = (@_);
 
     #
@@ -812,16 +772,14 @@ sub downloadPackagesToDirectory
     #  Unless we've been told not to then copy packages from
     # the cache.
     #
-    if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } )
-    {
+    if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } ) {
 
         #
         #  Make sure we have a cache directory.
         #
-        if ( -d $cache )
-        {
-            print "Copying rpm's from cache $cache to $dir\n" if $CONFIG{ 'verbose' };
-            copyPackageFiles( $cache, $dir );
+        if ( -d $cache ) {
+          print "Copying rpm's from cache $cache to $dir\n" if $CONFIG{ 'verbose' };
+          copyPackageFiles( $cache, $dir );
         }
     }
 
@@ -853,45 +811,40 @@ sub downloadPackagesToDirectory
     #  Process each package we're supposed to fetch.
     #
   PACKAGE:
-    foreach my $package (@packages)
-    {
+    foreach my $package (@packages) {
       $count ++;
 
-#        ! $CONFIG{ 'print-uris' } && $CONFIG{ 'verbose' } && print "-Download $package\n";
+      #
+      # Find the candidate package to download from our list of links.
+      #
+      # the grep should normally only return one key, so foreach may be obsolete
 
-        #
-        # Find the candidate package to download from our list of links.
-        #
-        # the grep should normally only return one key, so foreach may be obsolete
+      foreach my $key (grep { /^\Q$package-\E([^-]+)-([^-]+)\.(\w+)\.rpm$/ } keys %links) {
 
-        foreach my $key (grep { /^\Q$package-\E([^-]+)-([^-]+)\.(\w+)\.rpm$/ } keys %links) {
-
-
-            if ( $CONFIG{ 'print-uris' } ) {
-              print "$links{ $key}\n";
-              next PACKAGE;
-            }
-
-                #
-                #  Print message and padding.
-                #
-            if ( -e "$dir/$key") {
-              $msg = "\r[$count:$total] Copy from cache: $key ..";
-            } else {
-              $msg = "\r[$count:$total] Downloading    : $key ..";
-            }
-                while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) )
-                {
-                    $msg .= " ";
-                }
-            print $msg;
-
-                # download - unless already present.
-            system("wget --quiet -O $dir/$key $links{ $key }") unless -e "$dir/$key";
-            next PACKAGE;
+        if ( $CONFIG{ 'print-uris' } ) {
+          print "$links{ $key}\n";
+          next PACKAGE;
         }
-        print "[Harmless] Failed to find download link for $package\n";
+
+        #
+        #  Print message and padding.
+        #
+        if ( -e "$dir/$key") {
+          $msg = "\r[$count:$total] Copy from cache: $key ..";
+        } else {
+          $msg = "\r[$count:$total] Downloading    : $key ..";
+        }
+        while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) ) {
+          $msg .= " ";
+        }
+        print $msg;
+
+        # download - unless already present.
+        system("wget --quiet -O $dir/$key $links{ $key }") unless -e "$dir/$key";
+        next PACKAGE;
       }
+      print "[Harmless] Failed to find download link for $package\n";
+    }
 
     select($old_fh);
 
@@ -903,15 +856,14 @@ sub downloadPackagesToDirectory
     #
     #  Now update the cache.
     #
-    if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } )
-    {
+    if ( ( $CONFIG{ 'cache' } ) && !$CONFIG{ 'print-uris' } ) {
       print "Copying rpm's from $dir to cache $cache\n" if $CONFIG{ 'verbose' };
 
-        #
-        #  Make sure we have a cache directory.
-        #
-        mkpath( $cache, 0, 0755 ) unless -d $cache;
-        copyPackageFiles( $dir, $cache );
+      #
+      #  Make sure we have a cache directory.
+      #
+      mkpath( $cache, 0, 0755 ) unless -d $cache;
+      copyPackageFiles( $dir, $cache );
     }
 }
 
@@ -926,8 +878,8 @@ sub downloadPackagesToDirectory
 
 =cut
 
-sub findMirrorContents
-{
+sub findMirrorContents {
+
     my ($mirror) = (@_);
 
     #
@@ -951,60 +903,57 @@ sub findMirrorContents
     #
     # Parse the HTML.
     #
-    foreach my $line ( split( /\n/, $index ) )
-    {
+    foreach my $line ( split( /\n/, $index ) ) {
 
-        #
-        #  Look for contents of the form:
-        #
-        #     href="...">
-        #
-        while ( $line =~ /href=\"([^\"]+)\">(.*)/i )
-        {
-            my $link = $1;
-	    $line = $2;
+      #
+      #  Look for contents of the form:
+      #
+      #     href="...">
+      #
+      while ( $line =~ /href=\"([^\"]+)\">(.*)/i ) {
+        my $link = $1;
+        $line = $2;
 
-            # initial character + "/" link is sub index.
-	    if ( $link =~ /^[0-9a-z]\/$/i ) {
-		push @sub_indexes, $link;
-		next;
-	    }
-
-            # RPM is found.
-	    if ( $link =~ /\.rpm$/i ) {
-		$have_rpm = 1;
-		last;
-	    }
+        # initial character + "/" link is sub index.
+        if ( $link =~ /^[0-9a-z]\/$/i ) {
+          push @sub_indexes, $link;
+          next;
         }
 
-	if ( $have_rpm ) {
-	    last;
-	}
+        # RPM is found.
+        if ( $link =~ /\.rpm$/i ) {
+          $have_rpm = 1;
+          last;
+        }
+      }
+
+      if ( $have_rpm ) {
+        last;
+      }
     }
 
     if ( $have_rpm ) {
-	return findMirrorContentsInPage($mirror);
+      return findMirrorContentsInPage($mirror);
     } else {
-	my %links;
+      my %links;
 
-	# Collect all RPM links in sub index pages.
-	if ($CONFIG{ 'verbose' }) {
-	  print "Loading sub index pages from $mirror\n";
-	  $old_fh = select(STDOUT);
-	  $| = 1;
-	}
+      # Collect all RPM links in sub index pages.
+      if ($CONFIG{ 'verbose' }) {
+        print "Loading sub index pages from $mirror\n";
+        $old_fh = select(STDOUT);
+        $| = 1;
+      }
 
-	foreach my $sub_index ( @sub_indexes )
-	{
-	  $subindex = $sub_index;
-	  $subindex =~ s#/$##;
-	  print "$subindex " if $CONFIG{ 'verbose' };
-	    %links = ( %links, findMirrorContentsInPage("$mirror/$sub_index") );
-	}
-	print "\n" if $CONFIG{ 'verbose' };
-	select($old_fh) if $CONFIG{ 'verbose' };
+      foreach my $sub_index ( @sub_indexes ) {
+        $subindex = $sub_index;
+        $subindex =~ s#/$##;
+        print "$subindex " if $CONFIG{ 'verbose' };
+        %links = ( %links, findMirrorContentsInPage("$mirror/$sub_index") );
+      }
+      print "\n" if $CONFIG{ 'verbose' };
+      select($old_fh) if $CONFIG{ 'verbose' };
 
-	return (%links);
+      return (%links);
     }
 }
 
@@ -1017,8 +966,8 @@ sub findMirrorContents
 
 =cut
 
-sub findMirrorContentsInPage
-{
+sub findMirrorContentsInPage {
+
     my ($mirror) = (@_);
 
     #
@@ -1034,34 +983,30 @@ sub findMirrorContentsInPage
     #
     # Parse the HTML.
     #
-    foreach my $line ( split( /\n/, $index ) )
-    {
+    foreach my $line ( split( /\n/, $index ) ) {
 
-        #
-        #  Look for contents of the form:
-        #
-        #     href="...">
-        #
-        while ( $line =~ /href=\"([^\"]+)\">(.*)/i )
-        {
-            my $link = $1;
-            $line = $2;
+      #
+      #  Look for contents of the form:
+      #     href="...">
+      #
+      while ( $line =~ /href=\"([^\"]+)\">(.*)/i ) {
+        my $link = $1;
+        $line = $2;
 
-            # strip any path from the link.
-            $link = $2 if ( $link =~ /^(.*)\/(.*)$/ );
+        # strip any path from the link.
+        $link = $2 if ( $link =~ /^(.*)\/(.*)$/ );
 
-            # ignore any non-RPM links.
-            next if ( $link !~ /\.rpm$/i );
+        # ignore any non-RPM links.
+        next if ( $link !~ /\.rpm$/i );
 
-            #  Decode entities.  eg. libstd++
-            $link = uri_unescape($link);
+        #  Decode entities.  eg. libstd++
+        $link = uri_unescape($link);
 
-            # store
-            $links{ $link } = "$mirror/$link";
-            $links{ $link } =~ s#//#/#g; # remove duplicate slashes
-            $links{ $link } =~ s#^http:/#http://#; # except for http
-
-        }
+        # store
+        $links{ $link } = "$mirror/$link";
+        $links{ $link } =~ s#//#/#g; # remove duplicate slashes
+        $links{ $link } =~ s#^http:/#http://#; # except for http
+      }
     }
 
     #
@@ -1074,20 +1019,17 @@ sub findMirrorContentsInPage
     $i386 = 1 if ( $CONFIG{ 'arch' } =~ /i386/ );
     $i386 = 0 if ( $CONFIG{ 'arch' } =~ /amd64/ );
 
-    foreach my $key ( sort keys %links )
-    {
+    foreach my $key ( sort keys %links ) {
 
-        # i386/i486/i586/i686 packages when we're dealing with amd64 installs.
-        if ( ( $key =~ /\.i[3456]86\.rpm/ ) && !$i386 )
-        {
-            delete( $links{ $key } );
-        }
+      # i386/i486/i586/i686 packages when we're dealing with amd64 installs.
+      if ( ( $key =~ /\.i[3456]86\.rpm/ ) && !$i386 ) {
+        delete( $links{ $key } );
+      }
 
-        # amd64 packages when we're dealing with i386 installs.
-        if ( $key =~ /\.x86_64\.rpm/ && ($i386) )
-        {
-            delete( $links{ $key } );
-        }
+      # amd64 packages when we're dealing with i386 installs.
+      if ( $key =~ /\.x86_64\.rpm/ && ($i386) ) {
+        delete( $links{ $key } );
+      }
     }
 
     return (%links);
@@ -1103,8 +1045,8 @@ sub findMirrorContentsInPage
 
 =cut
 
-sub downloadURL
-{
+sub downloadURL {
+
     my ($URL) = (@_);
 
     #
@@ -1122,15 +1064,12 @@ sub downloadURL
     #
     #  If it worked then return it
     #
-    if ( $response->is_success )
-    {
-        return ( $response->content );
-    }
-    else
-    {
-        print "Failed to fetch : $URL\n";
-        print "\t" . $response->status_line . "\n\n";
-        exit;
+    if ( $response->is_success ) {
+      return ( $response->content );
+    } else {
+      print "Failed to fetch : $URL\n";
+      print "\t" . $response->status_line . "\n\n";
+      exit;
     }
 }
 
@@ -1168,8 +1107,8 @@ sub updaterpmdb {
 
 =cut
 
-sub unpackPackages
-{
+sub unpackPackages {
+
     my ($dir) = (@_);
 
     #
@@ -1184,40 +1123,32 @@ sub unpackPackages
     #
     #  For each RPM file: convert to .tgz
     #
-    foreach my $file (@rpms)
-    {
+    foreach my $file (@rpms) {
 
-        #
-        #  Show status
-        #
-        my $name = $file;
-        if ( $name =~ /(.*)\/(.*)/ )
-        {
-            $name = $2;
-        }
+      #  Show status
+      my $name = $file;
+      if ( $name =~ /(.*)\/(.*)/ ) {
+        $name = $2;
+      }
 
-        #
-        #  Show status output.
-        #
-        my $msg = "\rExtracting: $name";
-        while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) )
-        {
-            $msg .= " ";
-        }
-        print $msg;
+      #  Show status output.
+      #
+      my $msg = "\rExtracting: $name";
+      while ( length($msg) < ( $CONFIG{ 'width' } - 1 ) ) {
+        $msg .= " ";
+      }
+      print $msg;
 
-        #
-        #  Run the unpacking command.
-        #
-        my $cmd =
-          "rpm2cpio $file | (cd $CONFIG{'directory'} ; cpio --extract --make-directories --no-absolute-filenames --preserve-modification-time) 2>/dev/null >/dev/null";
-        if ( $file =~ /(fedora|centos|redhat|mandriva)-release-/ )
-        {
-            my $rpmname = basename($file);
-            $postcmd =
-              "cp $file $CONFIG{'directory'}/tmp ; chroot $CONFIG{'directory'} rpm -ivh --force --nodeps /tmp/$rpmname ; rm $CONFIG{'directory'}/tmp/$rpmname";
-          }
-        system($cmd );
+      #  Run the unpacking command.
+      #
+      my $cmd =
+        "rpm2cpio $file | (cd $CONFIG{'directory'} ; cpio --extract --make-directories --no-absolute-filenames --preserve-modification-time) 2>/dev/null >/dev/null";
+      if ( $file =~ /(fedora|centos|redhat|mandriva)-release-/ ) {
+        my $rpmname = basename($file);
+        $postcmd =
+          "cp $file $CONFIG{'directory'}/tmp ; chroot $CONFIG{'directory'} rpm -ivh --force --nodeps /tmp/$rpmname ; rm $CONFIG{'directory'}/tmp/$rpmname";
+      }
+      system($cmd );
 
     }
     print "\r";
@@ -1231,14 +1162,13 @@ sub unpackPackages
     #
     # So here we force the install with rpm of the one we previously found
     #
-    if ( $postcmd ne "" )
-    {
+    if ( $postcmd ne "" ) {
       if ($CONFIG{ 'verbose' }) {
         print "Execute postcmd $postcmd\n";
       } else {
         print "Execute postcmd of *-release package\n";
       }
-        system($postcmd);
+      system($postcmd);
     }
 }
 
@@ -1259,8 +1189,8 @@ sub unpackPackages
 
 =cut
 
-sub postInstallationCustomization
-{
+sub postInstallationCustomization {
+
     my ( $distribution, $prefix ) = (@_);
 
 
@@ -1278,23 +1208,19 @@ sub postInstallationCustomization
     #  Did we get a custom file to execute before?
     #
     if ( ( defined $CONFIG{ 'before-post-install' } ) &&
-         ( -x $CONFIG{ 'before-post-install' } ) )
-    {
-        print "Running custom script: $CONFIG{'before-post-install'}\n";
-
-        system( $CONFIG{ 'before-post-install' }, $prefix );
+         ( -x $CONFIG{ 'before-post-install' } ) ) {
+      print "Running custom script: $CONFIG{'before-post-install'}\n";
+      system( $CONFIG{ 'before-post-install' }, $prefix );
     }
 
     #
     #  Did we get a custom file to execute?
     #
     if ( ( defined $CONFIG{ 'post-install' } ) &&
-         ( -x $CONFIG{ 'post-install' } ) )
-    {
-        print "Running custom script: $CONFIG{'post-install'}\n";
-
-        system( $CONFIG{ 'post-install' }, $prefix );
-        return;
+         ( -x $CONFIG{ 'post-install' } ) ) {
+      print "Running custom script: $CONFIG{'post-install'}\n";
+      system( $CONFIG{ 'post-install' }, $prefix );
+      return;
     }
 
 
@@ -1309,14 +1235,12 @@ sub postInstallationCustomization
     #
     #  For each one
     #
-    foreach my $script ( @scripts )
-    {
-        foreach my $file ( sort( glob( "$script/*" ) ) )
-        {
-            print "Running post-install script $file:\n";
-            my $cmd = "$file $prefix";
-            system($cmd );
-        }
+    foreach my $script ( @scripts ) {
+      foreach my $file ( sort( glob( "$script/*" ) ) ) {
+        print "Running post-install script $file:\n";
+        my $cmd = "$file $prefix";
+        system($cmd );
+      }
     }
 
 
@@ -1324,11 +1248,9 @@ sub postInstallationCustomization
     #  Did we get a custom file to execute after?
     #
     if ( ( defined $CONFIG{ 'after-post-install' } ) &&
-         ( -x $CONFIG{ 'after-post-install' } ) )
-    {
-        print "Running custom script: $CONFIG{'after-post-install'}\n";
-
-        system( $CONFIG{ 'after-post-install' }, $prefix );
+         ( -x $CONFIG{ 'after-post-install' } ) ) {
+      print "Running custom script: $CONFIG{'after-post-install'}\n";
+      system( $CONFIG{ 'after-post-install' }, $prefix );
     }
 
 }
@@ -1343,27 +1265,24 @@ sub postInstallationCustomization
 
 =cut
 
-sub copyPackageFiles
-{
+sub copyPackageFiles {
+
     my ( $src, $dest ) = (@_);
 
-    foreach my $file ( sort( glob( "$src/*.rpm" ) ) )
-    {
+    foreach my $file ( sort( glob( "$src/*.rpm" ) ) ) {
 
-        # strip path.
-        if ( $file =~ /^(.*)\/(.*)$/ )
-        {
-            $file = $2;
-        }
+      # strip path.
+      if ( $file =~ /^(.*)\/(.*)$/ ) {
+        $file = $2;
+      }
 
-        #
-        # if the file isn't already present in the destination then
-        # copy it there. Copy only if source is non-empty.
-        #
-        if ( ! -e "$dest/$file" && -s "$src/$file" )
-        {
-            copy( "$src/$file", "$dest/$file" );
-        }
+      #
+      # if the file isn't already present in the destination then
+      # copy it there. Copy only if source is non-empty.
+      #
+      if ( ! -e "$dest/$file" && -s "$src/$file" ) {
+        copy( "$src/$file", "$dest/$file" );
+      }
     }
 }
 
@@ -1380,8 +1299,8 @@ sub copyPackageFiles
 =cut
 
 
-sub getTerminalSize
-{
+sub getTerminalSize {
+
     my $testModule = "use Term::Size;";
 
     my $width  = 80;
@@ -1392,16 +1311,14 @@ sub getTerminalSize
     # then we will use the defaults sizes.
     #
     eval($testModule);
-    unless ($@)
-    {
+    unless ($@) {
 
-        #
-        # Term::Size is available, so use it to find
-        # the current terminal size.
-        #
-        ( $width, $height ) = Term::Size::chars();
+      #
+      # Term::Size is available, so use it to find
+      # the current terminal size.
+      #
+      ( $width, $height ) = Term::Size::chars();
     }
-
     return ( $width, $height );
 }
 
@@ -1422,23 +1339,20 @@ sub getTerminalSize
 
 =cut
 
-sub uri_unescape
-{
+sub uri_unescape {
 
     # Note from RFC1630:  "Sequences which start with a percent sign
     # but are not followed by two hexadecimal characters are reserved
     # for future extension"
     my $str = shift;
-    if ( @_ && wantarray )
-    {
+    if ( @_ && wantarray ) {
 
-        # not executed for the common case of a single argument
-        my @str = ( $str, @_ );    # need to copy
-        foreach (@str)
-        {
-            s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
-        }
-        return @str;
+      # not executed for the common case of a single argument
+      my @str = ( $str, @_ );    # need to copy
+      foreach (@str) {
+        s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg;
+      }
+      return @str;
     }
     $str =~ s/%([0-9A-Fa-f]{2})/chr(hex($1))/eg if defined $str;
     return $str;
