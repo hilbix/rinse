@@ -10,6 +10,8 @@ if [ ! -d "${prefix}" ]; then
   exit
 fi
 
+touch ${prefix}/etc/mtab
+
 # rpm's can now be removed
 rm -f ${prefix}/*.rpm
 
