@@ -23,10 +23,10 @@ Rationale
 Resources
 ---------
 Homepage:
-    http://steve.org.uk/Software/rinse/
+    http://collab-maint.alioth.debian.org/rinse/
 
-Mercurial Repository:
-    http://rinse.repository.steve.org.uk/
+Git Repository:
+    git://git.debian.org/git/collab-maint/rinse.git
 
 
 Supported Distributions
