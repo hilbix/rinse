@@ -76,9 +76,6 @@ EOT
 # Need key trusted to prevent warnings during package install
 chroot ${prefix} /usr/bin/zypper -n --gpg-auto-import-keys refresh --force-download
 
-# Sets permissions correctly and provides /etc/sysconfig/security that many things want
-#chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install permissions    2>&1
-
 # The base system
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install aaa_base module-init-tools    2>&1
 chroot ${prefix} /usr/bin/zypper -n --no-gpg-checks install zypper vim syslog-ng     2>&1
