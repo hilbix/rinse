@@ -1,23 +1,19 @@
 libssh2-1
-augeas-lenses
 bash
 bridge-utils
 bzip2
 coreutils
 cpio
 cracklib
-cracklib-dict-full
+cracklib-dict-small
 cron
 cronie
 cyrus-sasl
-dbus-1
 device-mapper
-dhcpcd
 diffutils
 dirmngr
 e2fsprogs
 elfutils
-exim
 file
 filesystem
 fillup
@@ -50,7 +46,6 @@ libcrack2
 libcryptsetup4
 libcurl4
 libdb-4_8
-libdbus-1-3
 libdw1
 libelf1
 libexpat1
@@ -58,7 +53,6 @@ libext2fs2
 libgcc_s1
 libgcrypt11
 libgdbm4
-libgmp10
 libgnutls28
 libgpg-error0
 libgssglue1
@@ -107,7 +101,6 @@ libz1
 libzio1
 libzypp
 logrotate
-lsof
 mkinitrd
 ncurses-utils
 net-tools
@@ -118,7 +111,6 @@ perl
 perl-base
 perl-gettext
 permissions
-pinentry
 procps
 python
 python-base
