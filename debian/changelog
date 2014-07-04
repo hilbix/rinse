@@ -1,23 +1,24 @@
-rinse (3.0~beta14) UNRELEASED; urgency=low
+rinse (3.0) unstable; urgency=low
 
-  * add subroutin updaterpmdb, which fixes the status of the packages
-    inside the target
-  * convert to a native Debian package
-  * new rules file, adjust Makefile
+  * add subroutine updaterpmdb, which fixes the status of the packages
+    inside the target (before, they were not recongnized as installed)
+  * major changes in output of messages
   * include patches from Nathan O'Sullivan <nathan@mammoth.com.au>
   * add i586 to list of 32bit architectures
   * add config for newer fedora and openSUSE releases, Closes: #684013
-  * setup /etc/rpm/platform in CentOS 5 postinst
   * support sub index page links
   * increase timeout, Closes: #733728
-  * fix CentOS 4 URL's, Closes: #702315
   * new code in sub downloadPackagesToDirectory for determine the download
-    Link for a certain package
-  * major changes in output of messages
+    link for a certain package
+  * setup /etc/rpm/platform in CentOS 5 postinst
+  * fix CentOS 4 URL's, Closes: #702315
   * cleanup postinst scripts of openSUSE 11.3 12,3, fedora 19 and 18
   * add support for openSUSE 13.1, mostly a copy of 12.3
+  * convert to a native Debian package
+  * new rules file, adjust Makefile
+  * update standards version, no change needed
 
- -- Thomas Lange <lange@debian.org>  Tue, 01 Jul 2014 16:28:32 +0200
+ -- Thomas Lange <lange@debian.org>  Fri, 04 Jul 2014 13:19:08 +0200
 
 rinse (2.0.1-1) unstable; urgency=low
 
