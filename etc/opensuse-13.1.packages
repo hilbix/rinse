@@ -46,6 +46,7 @@ libcrack2
 libcryptsetup4
 libcurl4
 libdb-4_8
+libdbus-1-3
 libdw1
 libelf1
 libexpat1
