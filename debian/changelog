@@ -1,8 +1,8 @@
-rinse (3.0.1~beta1) unstable; urgency=low
+rinse (3.0.1) unstable; urgency=low
 
   * add CentOS 7 support, Closes: #754152
 
- -- Thomas Lange <lange@debian.org>  Tue, 08 Jul 2014 14:59:25 +0200
+ -- Thomas Lange <lange@debian.org>  Tue, 08 Jul 2014 15:05:26 +0200
 
 rinse (3.0) unstable; urgency=low
 
