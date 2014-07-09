@@ -104,3 +104,4 @@ yum-metadata-parser
 yum-utils
 zlib
 libffi
+libsemanage
