@@ -1,3 +1,9 @@
+rinse (3.0.2) unstable; urgency=low
+
+  * add missing package for CentOS 7
+
+ -- Thomas Lange <lange@debian.org>  Wed, 09 Jul 2014 16:20:28 +0200
+
 rinse (3.0.1) unstable; urgency=low
 
   * add CentOS 7 support, Closes: #754152
