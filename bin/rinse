@@ -1117,6 +1117,11 @@ sub unpackPackages {
     my @rpms = glob( "$dir/*.rpm" );
     @rpms = sort {lc($a) cmp lc($b)} @rpms;
 
+    # the package filesystem should be extracted first
+    my @fs = grep {  /filesystem/ } @rpms;
+    @rpms  = grep { !/filesystem/ } @rpms;
+    unshift @rpms, @fs;
+
     # Command to execute after extraction
     my $postcmd = "";
 
