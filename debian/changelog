@@ -1,3 +1,11 @@
+rinse (3.0.3) unstable; urgency=low
+
+  * always unpack the package filesystem first. This is needed because of
+    CentOS/Fedora /usr-move. Some subdirs (like /sbin) are now symlinks
+    to /usr/<name>.
+
+ -- Thomas Lange <lange@debian.org>  Fri, 25 Jul 2014 13:24:46 +0200
+
 rinse (3.0.2) unstable; urgency=low
 
   * add missing package for CentOS 7
