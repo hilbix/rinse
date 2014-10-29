@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #  post-install.sh
-#  CentOS 6
+#  CentOS 7
 
 prefix=$1
 
@@ -14,6 +14,35 @@ fi
 rm -f ${prefix}/*.rpm
 
 touch ${prefix}/etc/mtab
+
+
+# add command, that are normally executed in postinst or similar
+mv $prefix/var/run/* $prefix/run
+rmdir $prefix/var/run
+ln -s /run $prefix/var/run
+ln -s /run/lock $prefix/var/lock
+chroot $prefix groupadd -g 22 -r -f utmp
+chroot $prefix touch /var/log/wtmp /var/run/utmp /var/log/btmp
+chroot $prefix chown root:utmp /var/log/wtmp /var/run/utmp /var/log/btmp
+chroot $prefix chmod 664 /var/log/wtmp /var/run/utmp
+chroot $prefix chmod 600 /var/log/btmp
+
+chroot $prefix groupadd -g 35 -r -f utempter
+chroot $prefix groupadd -g 21 -r -f slocate
+
+install -m 600 /dev/null $prefix/var/log/tallylog
+
+for n in $prefix/var/log/{messages,secure,maillog,spooler}
+do
+	[ -f $n ] && continue
+	umask 066 && touch $n
+done
+touch $prefix/var/log/lastlog
+chown root:root $prefix/var/log/lastlog
+chmod 0644 $prefix/var/log/lastlog
+
+ln -fs /proc/mounts $prefix/etc/mtab
+
 
 echo "  Bootstrapping yum"
 chroot ${prefix} /usr/bin/yum -y install yum vim-minimal dhclient 2>/dev/null
