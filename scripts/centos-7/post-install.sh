@@ -21,6 +21,11 @@ mv $prefix/var/run/* $prefix/run
 rmdir $prefix/var/run
 ln -s /run $prefix/var/run
 ln -s /run/lock $prefix/var/lock
+
+chroot $prefix alternatives --install /usr/bin/ld ld   /usr/bin/ld.bfd 50
+chroot $prefix alternatives --install /usr/bin/ld ld   /usr/bin/ld.gold 30
+chroot $prefix alternatives --auto ld
+
 chroot $prefix groupadd -g 22 -r -f utmp
 chroot $prefix touch /var/log/wtmp /var/run/utmp /var/log/btmp
 chroot $prefix chown root:utmp /var/log/wtmp /var/run/utmp /var/log/btmp
