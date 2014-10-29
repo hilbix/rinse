@@ -114,3 +114,4 @@ gmp
 json-c
 libss
 libuuid
+libdevmapper
