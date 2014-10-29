@@ -32,11 +32,12 @@ chroot $prefix groupadd -g 21 -r -f slocate
 
 install -m 600 /dev/null $prefix/var/log/tallylog
 
-for n in $prefix/var/log/{messages,secure,maillog,spooler}
-do
+cd $prefix/var/log
+for n in messages secure maillog spooler;do
 	[ -f $n ] && continue
 	umask 066 && touch $n
 done
+cd /
 touch $prefix/var/log/lastlog
 chown root:root $prefix/var/log/lastlog
 chmod 0644 $prefix/var/log/lastlog
