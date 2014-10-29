@@ -108,10 +108,9 @@ libffi
 libsemanage
 libblkid
 libmount
-lvm2-libs
+device-mapper-libs
 libestr
 gmp
 json-c
 libss
 libuuid
-libdevmapper
