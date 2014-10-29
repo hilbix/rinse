@@ -106,3 +106,11 @@ yum-utils
 zlib
 libffi
 libsemanage
+libblkid
+libmount
+lvm2-libs
+libestr
+gmp
+json-c
+libss
+libuuid

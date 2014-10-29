@@ -110,3 +110,7 @@ yum-plugin-protectbase
 yum-metadata-parser
 yum-utils
 zlib
+libblkid
+libdevmapper
+libss
+libuuid
