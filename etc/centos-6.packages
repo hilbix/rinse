@@ -114,3 +114,4 @@ libblkid
 libdevmapper
 libss
 libuuid
+gmp
